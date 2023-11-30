@@ -24,6 +24,7 @@
     "react-easy-edit": "^1.17.2",
     "react-editor-js": "^2.1.0",
     "react-markdown": "^9.0.1",
+    "react-quill": "^2.0.0",
     "react-router-dom": "^6.20.0",
     "remark-gfm": "^4.0.0"
   },

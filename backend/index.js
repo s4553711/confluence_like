@@ -45,8 +45,10 @@ r.get('/download/attachments/:id/:f', (req, res) => {
 })
 
 r.post('/notes/add', storage.add_note)
-r.get('/notes/read', storage.read_note)
-r.use('/note/:id', md_work)
+r.post('/notes/edit', storage.edit_note)
+r.get('/note/:id', storage.read_note)
+r.get('/notes/read', storage.list_note)
+r.use('/archive/:id', md_work)
 
 app.use("/api", r);
 app.use(express.static('public'))

@@ -10,7 +10,7 @@ function Root() {
 	},{
 		text: 'Pages', url: '/pages'
 	},{
-		text: 'List Archives', url: '/list'
+		text: 'Archives', url: '/archives'
 	},{
 		text: 'App', url: '/app'
 	}]
@@ -26,13 +26,12 @@ function Root() {
     <>
 		<div className="border-bottom p-2 d-flex align-items-center" style={{background:"#0049b0"}}>
 			<div><span className="h5 text-white pe-2">Confluence</span></div>
-			<button type="button" class="btn btn-primary rounded-1 d-flex align-items-center" onClick={f1}><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
+			<button type="button" className="btn btn-primary rounded-1 d-flex align-items-center" onClick={f1}><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-plus" viewBox="0 0 16 16">
   <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>
 </svg>Create</button>
 		</div>
 		<main className="d-flex flex-nowrap h-100 vw-100">
-			<div className="d-flex flex-column flex-shrink-0 p-3 text-bg-light border-right" style={{width:'240px'}}>
-			<span class="h3">Confluence</span>
+			<div className="d-flex flex-column flex-shrink-0 p-3 text-bg-light border-right text-start" style={{width:'240px'}}>
 			<hr/>
 				<ul className="nav nav-pills flex-column mb-auto">
 					{pages.map((v, i) => (<li key={i} className="nav-item"><NavLink to={v.url} className="nav-link">{v.text}</NavLink></li>))

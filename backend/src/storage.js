@@ -29,6 +29,19 @@ const add_note = (req, res) => {
 	res.json({'status': 200})
 }
 
+const edit_note = (req, res) => {
+	let title = req.body.title;
+	let content = req.body.body;
+	let tid = req.body.tid;
+	db.serialize(() => {
+		const stmt = db.prepare("update notes set title = ? , content = ? where id = ?");
+		stmt.run(title, content, tid);
+		stmt.finalize();
+		logger.info(`update success (${tid})`);
+	});
+	res.json({'status': 200})
+}
+
 const prepare = (sql) => new Promise((resolve, reject) => {
 	const stmt = db.prepare(sql, err => {
 		if (err===null)
@@ -47,7 +60,16 @@ const getNotes = async (db, table) => {
     });
 }
 
-const read_note = async (req, res) => {
+const getNoteById = async (db, table, id) => {
+    return new Promise((resolve, reject) => {
+        db.all(`SELECT * FROM '${table}' where id = ${id}`,(err, row) => {
+            if (err) reject(err);
+            resolve(row);
+        });
+    });
+}
+
+const list_note = async (req, res) => {
 	//let select = await prepare("select * from notes limit 10");
 	//let all = await promisify(select.all.bind(select));
 	//let ret = await all();
@@ -55,7 +77,17 @@ const read_note = async (req, res) => {
 	res.json({'status': 200, data: ret});
 }
 
+const read_note = async (req, res) => {
+	let tid = req.params.id
+	console.log('receive ',tid);
+	let ret = await getNoteById(db, 'notes', tid);
+	res.json({'status': 200, data: ret[0]});
+	
+}
+
 module.exports = {
 	add_note,
-	read_note
+	edit_note,
+	list_note,
+	read_note,
 }

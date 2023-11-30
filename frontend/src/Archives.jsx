@@ -3,7 +3,7 @@ import React from 'react'
 import {Link} from "react-router-dom";
 import axios from 'axios'
 
-function ListArticles() {
+function Archives() {
 	const [count, setCount] = useState(0)
 	const [post, setPost] = React.useState([])
 
@@ -19,7 +19,7 @@ function ListArticles() {
 			<div className="text-start">
 				<ol>
 					{post.map((v, i) => (
-						<li key={i}>{v.title} (<Link to={"/note/"+v.id}>link</Link>)</li>
+						<li key={i}>{v.title} (<Link to={"/archive/"+v.id}>link</Link>)</li>
 					))}
 				</ol>
 			</div>
@@ -27,4 +27,4 @@ function ListArticles() {
 	)
 }
 
-export default ListArticles
+export default Archives

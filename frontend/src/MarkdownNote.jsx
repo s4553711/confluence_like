@@ -12,12 +12,12 @@ export function getNotes(id) {
 export async function loader({params}) {
 	//const { name, ret } = await getNotes(params.noteId);
 	//return { name, ret };
-	let rep = await axios.get('http://127.0.0.1:3344/api/note/'+params.noteId);
+	let rep = await axios.get('http://127.0.0.1:3344/api/archive/'+params.noteId);
 	console.log(rep);
 	return {...rep.data, noteId: params.noteId};
 }
 
-function Note() {
+function MarkdownNote() {
 	const {noteId, message, title} = useLoaderData();
 	const [count, setCount] = useState(0)
 
@@ -40,4 +40,4 @@ function Note() {
 	)
 }
 
-export default Note
+export default MarkdownNote

@@ -2,6 +2,7 @@ import { useState } from 'react'
 import React from 'react'
 import {Link} from "react-router-dom";
 import axios from 'axios';
+import userLogo from './assets/user.png'
 
 function AllNote() {
 	const [post, setPost] = React.useState([])
@@ -19,17 +20,23 @@ function AllNote() {
 		<>
 			<div className="h5 p-2 text-start bold">All pages</div>
 			{post.map((v, i) => (
-			<div key={i} className="card p-2 border-0" style={{maxWidth:"540px"}}>
+			<div key={i} className="card p-2 border-0" style={{maxWidth:"800px"}}>
 				<div className="row g-0 d-flex align-items-center">
-					<div className="col-md-2">
+					<div className="col-md-1 pe-1">
 						<img height={img_wh} width={img_wh} 
-							src="https://github.com/mdo.png" 
+							src={userLogo} 
 							className="img-fluid rounded-circle"/>
 					</div>
-					<div className="col-md-10 text-start">
-						<div className="card-body p-2">
-							<h5 className="card-title">mdo</h5>
-							<p className="card-text"><Link className="link-dark" style={{textDecoration: 'none'}} to={"/note/"+v.id}>{v.title}</Link></p>
+					<div className="col-md-11 text-start">
+						<div className="card-body py-1">
+							<h5 className="card-title mt-0 mb-1">Maxwell</h5>
+							<div className="card-text mb-0 d-flex lh-lg">
+								<div className="w-20 me-2 text-primary">
+									<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="d-inline bi bi-file-text-fill" viewBox="0 0 16 16">
+  <path d="M12 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2M5 4h6a.5.5 0 0 1 0 1H5a.5.5 0 0 1 0-1m-.5 2.5A.5.5 0 0 1 5 6h6a.5.5 0 0 1 0 1H5a.5.5 0 0 1-.5-.5M5 8h6a.5.5 0 0 1 0 1H5a.5.5 0 0 1 0-1m0 2h3a.5.5 0 0 1 0 1H5a.5.5 0 0 1 0-1"/></svg>
+								</div>
+								<Link className="link-dark" style={{textDecoration: 'none'}} to={"/page/"+v.id}>{v.title}</Link></div>
+							<p className="text-start" style={{color:'#b5b5b5'}}>{v.created}</p>
 						</div>
 					</div>
 				</div>

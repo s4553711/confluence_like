@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import React from 'react'
-import {Link, useNavigate} from "react-router-dom";
+import {Link, useNavigate, useLoaderData} from "react-router-dom";
 import axios from 'axios';
 import EasyEdit, {Types} from 'react-easy-edit';
 
@@ -19,10 +19,22 @@ import {
   Button, ButtonGroup,
 } from '@chakra-ui/react'
 
-function NewNote() {
+export async function loader ({params}) {
+	let rep = await axios.get('http://127.0.0.1:3344/api/note/'+params.pageId);
+	console.log(rep);
+	return {
+		old_title: rep.data.data.title, 
+		old_content: rep.data.data.content,
+		tid: rep.data.data.id,
+		pageId: params.pageId
+	};
+}
+
+function Edit() {
 	const navigate = useNavigate()
-	const [title, setTitle] = useState('')
-	const [post, setPost] = React.useState('')
+	const {pageId, tid, old_content, old_title} = useLoaderData()
+	const [title, setTitle] = useState(old_title)
+	const [post, setPost] = React.useState(old_content)
 	const [touch, setTouch] = React.useState(false)
 	const [editor, setEditor] = React.useState({})
 
@@ -52,9 +64,9 @@ function NewNote() {
 		}
 		axios({
 			method: 'post',
-			url: 'http://127.0.0.1:3344/api/notes/add',
+			url: 'http://127.0.0.1:3344/api/notes/edit',
 			headers: {'content-type': 'application/json'},
-			data: {title: title, body: post}
+			data: {title: title, body: post, tid: tid}
 		}).then((rep) => {
 			console.log(rep);
 			onOpen();
@@ -66,10 +78,6 @@ function NewNote() {
 		navigate("/pages");
 	}
 
-	const assign_editor = (e) => {
-		setEditor(e);
-	}
-
 	// inline-editor handler
 	const save = (value) => {
 		setTitle(value);
@@ -77,25 +85,30 @@ function NewNote() {
 	}
 	const cancel = () => {console.log("Cancelled")}
 
+	const assign_editor = (e) => {
+		setEditor(e);
+	}
+
 	return (
 		<>
 			<div className="d-flex flex-column h-100">
 			<div className="text-start p-3 flex-fill d-flex flex-column">
 				<div className="d-flex flex-row my-2">
 					<div className="h3 flex-fill">
-						<EasyEdit
-							type={Types.TEXT}
-							onSave={save}
-							onBlur={save}
-							onCancel={cancel}
-							saveButtonLabel="save"
-							cancelButtonLabel="cancel"
-							onHoverCssClass="no"
-							value=""
-							hideSaveButton={true}
-							hideCancelButton={true}
-							attributes={{ name: "awesome-input", id: 1}}
-						/>
+				<EasyEdit
+					type={Types.TEXT}
+					onSave={save}
+					onBlur={save}
+					onCancel={cancel}
+					saveButtonLabel="save"
+					cancelButtonLabel="cancel"
+					onHoverCssClass="no"
+					value={title}
+					hideSaveButton={true}
+					hideCancelButton={true}
+					attributes={{ name: "awesome-input", id: 1}}
+				/>
+
 					</div>
 					<button className="btn btn-primary rounded-1" onClick={sendHandler}>Share</button>
 				</div>
@@ -122,4 +135,4 @@ function NewNote() {
 	)
 }
 
-export default NewNote
+export default Edit
