@@ -38,6 +38,7 @@ module.exports = (req, res) => {
 	// transform confluence url into new one
 	markdown = markdown.replace(/\/pages\/viewpage\.action/g, "/page.html")
 		.replace(/\/download\/attachments/g, '/api/download/attachments')
+		.replace(/https:\/\/confluence\.daopin-inc\.com\/page\.html\?pageId\=/g, '/note/')
 
 	// get article info from json
 	let json_raw = fs.readFileSync(__dirname+'/../json/'+list_mapping(tlist))

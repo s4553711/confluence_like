@@ -10,13 +10,15 @@ import Edit, { loader as editLoader } from './Edit.jsx'
 import MarkdownNote, { loader as noteLoader } from './MarkdownNote.jsx'
 import Archives from './Archives.jsx'
 import Login from './Login.jsx'
-import TApp from './mainApp.jsx'
 import { createBrowserRouter, RouterProvider, useRouteError, Navigate} from "react-router-dom";
 import { StaticRouter, StaticRouterProvider} from "react-router-dom/server";
 //import './index.css'
 
 import { ChakraProvider } from '@chakra-ui/react'
+import AuthProvider from './AuthProvider.js';
 
+import { AuthProvider2 } from './AuthProvider2.jsx';
+import AuthConsumer from './AuthProvider2.jsx';
 
 function ErrorBoundary() {
 	let error = useRouteError();
@@ -26,11 +28,14 @@ function ErrorBoundary() {
 }
 
 const ProtectedRoute = ({ children }) => {
-	//const { token } = useAuth();
-	const token = React.useContext(AuthContext);
-	console.log("Protected router get value", token)
+	const { useTokenStore } = AuthProvider();
+	const token = useTokenStore((state) => state.token);
+	const token2 = AuthConsumer().token2;
 
-	if (!token) {
+	console.log('ProtectedRouter> 1', token);
+	console.log('ProtectedRouter> 2', token2);
+	//if (!token) {
+	if (token2 != 1) {
 		return <Navigate to="/login" replace />;
 	}
 
@@ -43,7 +48,8 @@ const router = createBrowserRouter([
 		element: <div>Hello world!</div>,
 	},{
 		path: "/",
-		element: <Root/>,
+		//element: <Root/>,
+		element: <ProtectedRoute><Root/></ProtectedRoute>,
 		//errorElement: <div>resources not found</div>,
 		errorElement: <ErrorBoundary/>,
 		children: [{
@@ -80,17 +86,15 @@ const router = createBrowserRouter([
 	}
 ]);
 
-/*ReactDOM.createRoot(document.getElementById('root')).render(
-	<React.StrictMode>
-		<ChakraProvider>
-			<RouterProvider router={router}/>
-		</ChakraProvider>
-	</React.StrictMode>,
-)*/
-ReactDOM.createRoot(document.getElementById('root')).render(
-	<React.StrictMode>
-		<ChakraProvider>
-			<TApp/>
-		</ChakraProvider>
-	</React.StrictMode>,
-)
+
+function TApp() {
+	return (
+		<>
+			<AuthProvider2>
+				<RouterProvider router={router}/>
+			</AuthProvider2>
+		</>
+	)
+}
+
+export default TApp;
