@@ -2,6 +2,7 @@ import { useState } from 'react'
 import {NavLink, Outlet, useNavigate} from "react-router-dom";
 import React from 'react'
 import AuthProvider from './AuthProvider.js';
+import userLogo from './assets/user.png'
 
 const { useTokenStore } = AuthProvider();
 import AuthConsumer from './AuthProvider2.jsx';
@@ -47,7 +48,7 @@ function Root() {
 </svg>Create</button>
 				<div className="dropdown me-4">
 					<a href="#" className="d-flex align-items-center text-white text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-						<img src="https://github.com/mdo.png" alt="" width="32" height="32" className="rounded-circle me-2"/>
+						<img src={userLogo} alt="" width="32" height="32" className="rounded-circle me-2"/>
 						<strong>{user}</strong>
 					</a>
 					<ul className="dropdown-menu dropdown-menu-dark text-small shadow">
@@ -60,14 +61,10 @@ function Root() {
 		</div>
 		<main className="d-flex flex-nowrap h-100 vw-100">
 			<div className="d-flex flex-column flex-shrink-0 p-3 text-bg-light border-right text-start" style={{width:'240px'}}>
-			<hr/>
 				<ul className="nav nav-pills flex-column mb-auto">
 					{pages.map((v, i) => (<li key={i} className="nav-item"><NavLink to={v.url} className="nav-link">{v.text}</NavLink></li>))
 					}
 				</ul>
-				<button className="btn btn-info" onClick={onLogin}>Add</button>
-				<span>{token}</span>
-				<span>{token2}</span>
 			<hr/>
 				<div className="dropdown">
 					<a href="#" className="d-flex align-items-center text-white text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">

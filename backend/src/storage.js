@@ -2,6 +2,7 @@ const pino = require('pino')
 const fs = require('fs')
 const sqlite3 = require('sqlite3').verbose();
 const db = new sqlite3.Database(__dirname+'/../example.db');
+const note_util = require('./note_work.js');
 const {promisify} = require('util');
 
 // set pino format
@@ -33,8 +34,12 @@ const edit_note = (req, res) => {
 	let title = req.body.title;
 	let content = req.body.body;
 	let tid = req.body.tid;
+
+	content = note_util.proc_img(content);
+	logger.info(`filtered content ${content}`);
+
 	db.serialize(() => {
-		const stmt = db.prepare("update notes set title = ? , content = ? where id = ?");
+		const stmt = db.prepare("update notes set title = ?, content = ?, updated = datetime() where id = ?");
 		stmt.run(title, content, tid);
 		stmt.finalize();
 		logger.info(`update success (${tid})`);
@@ -53,7 +58,7 @@ const prepare = (sql) => new Promise((resolve, reject) => {
 
 const getNotes = async (db, table) => {
     return new Promise((resolve, reject) => {
-        db.all(`SELECT * FROM '${table}'`,(err, row) => {
+        db.all(`SELECT * FROM '${table}' order by updated desc`,(err, row) => {
             if (err) reject(err);
             resolve(row);
         });

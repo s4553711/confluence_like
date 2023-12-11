@@ -22,10 +22,11 @@ const logger = pino({
 
 let sess = {
 	secret: 'happymeal',
+	rolling: true,
 	//resave: true,
 	//saveUninitialized: true,
 	cookie: {
-		maxAge: 60*1000
+		maxAge: 60*60*1000
 	}
 }
 
@@ -43,7 +44,7 @@ const isAuth = (req, res, next) => {
 	}
 }
 
-//app.use(cookieParser());
+app.use(cookieParser());
 app.use(session(sess));
 //app.use(isAuth);
 app.use(cors());
@@ -54,7 +55,9 @@ r.get('/', (req, res) => {
 })
 
 r.get('/login', (req, res) => {
-	logger.info('called login');
+	logger.info('called login', req.sessionID);
+	console.log('Cookies: ', req.cookies);
+	console.log(req.session);
 	req.session.user = 'ck';
 	req.session.login = true;
 	res.json({'status': 200, 'ret': true, 'session': req.sessionID, 'user': req.session.user});
@@ -69,7 +72,10 @@ r.get('/logout', (req, res) => {
 });
 
 r.get('/auth', (req, res) => {
-	logger.info('Auth with session', req.session.sessionID);
+	logger.info('Auth with session', req.sessionID);
+	console.log('Cookies: ', req.cookies);
+	console.log(req.sessionID);
+	console.log(req.session);
 	if (req.session.login) {
 		res.json({'status': 200, 'ret': true, 'session': req.sessionID, 'user': req.session.user});
 	} else {
@@ -96,6 +102,17 @@ r.get('/download/attachments/:id/:f', (req, res) => {
 	}
 })
 
+r.get('/resources/:f', (req, res) => {
+	let reqF = `${__dirname}/uploads/${req.params.f}`;
+	logger.info(`Load ${reqF}`);
+
+	try {
+		res.sendFile(reqF);
+	} catch(err) {
+		logger.info(err.message);
+	}
+})
+
 r.post('/notes/add', storage.add_note)
 r.post('/notes/edit', storage.edit_note)
 r.get('/note/:id', storage.read_note)
@@ -104,6 +121,7 @@ r.use('/archive/:id', md_work)
 
 app.use("/api", r);
 app.use(express.static('public'))
+app.use(express.static('uploads'))
 
 app.get('*', (req,res) =>{
     res.sendFile(path.join(__dirname+'/public/index.html'));

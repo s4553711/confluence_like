@@ -44,10 +44,10 @@ function Page() {
 
 	return (
 		<>
-			<div className="d-flex ms-3 mt-5">
+			<div className="d-flex ms-3 mt-3">
 				<div className="text-start flex-fill d-flex flex-column">
 					<div className="h1">{title}</div>
-					<div className="d-flex flex-row">
+					<div className="d-flex flex-row mt-2">
 						<div className="align-items-center align-self-center me-3">
 						<img height={img_wh} width={img_wh} 
 							src={userLogo} 
@@ -63,7 +63,7 @@ function Page() {
 					<button className="btn btn-primary" onClick={editHandler}>Edit</button>
 				</div>
 			</div>
-			<div className="text-start ms-3 mt-5" dangerouslySetInnerHTML={{__html: content}}>
+			<div className="text-start ms-3 mt-5 lh-sm" dangerouslySetInnerHTML={{__html: content}}>
 			</div>
 		</>
 	)

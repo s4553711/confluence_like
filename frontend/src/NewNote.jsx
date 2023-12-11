@@ -2,6 +2,7 @@ import { useState } from 'react'
 import React from 'react'
 import {Link, useNavigate} from "react-router-dom";
 import axios from 'axios';
+import userLogo from './assets/user.png'
 import EasyEdit, {Types} from 'react-easy-edit';
 
 import ReactQuill from 'react-quill';
@@ -19,12 +20,17 @@ import {
   Button, ButtonGroup,
 } from '@chakra-ui/react'
 
+import AuthConsumer from './AuthProvider2.jsx';
+
 function NewNote() {
 	const navigate = useNavigate()
 	const [title, setTitle] = useState('')
 	const [post, setPost] = React.useState('')
 	const [touch, setTouch] = React.useState(false)
 	const [editor, setEditor] = React.useState({})
+	const { user } = AuthConsumer();
+
+	console.log(user);
 
 	const my_modules = {
 		toolbar: [
@@ -54,7 +60,7 @@ function NewNote() {
 			method: 'post',
 			url: 'http://127.0.0.1:3344/api/notes/add',
 			headers: {'content-type': 'application/json'},
-			data: {title: title, body: post}
+			data: {title: title, body: post, user: user}
 		}).then((rep) => {
 			console.log(rep);
 			onOpen();
@@ -81,7 +87,7 @@ function NewNote() {
 		<>
 			<div className="d-flex flex-column h-100">
 			<div className="text-start p-3 flex-fill d-flex flex-column">
-				<div className="d-flex flex-row my-2">
+				<div className="d-flex flex-row my-2 align-items-center">
 					<div className="h3 flex-fill">
 						<EasyEdit
 							type={Types.TEXT}
@@ -97,9 +103,13 @@ function NewNote() {
 							attributes={{ name: "awesome-input", id: 1}}
 						/>
 					</div>
-					<button className="btn btn-primary rounded-1" onClick={sendHandler}>Share</button>
+					<div className="me-4 d-flex flex-row">
+						<img src={userLogo} alt="" width="32" height="32" className="rounded-circle me-2"/>
+						<div className="align-self-center">{user}</div>
+					</div>
+					<div><button className="btn btn-primary rounded-1" onClick={sendHandler}>Share</button></div>
 				</div>
-				<ReactQuill ref={assign_editor} theme="snow" value={post} onChange={setPost} modules={my_modules} />
+				<ReactQuill ref={assign_editor} theme="snow" value={post} onChange={setPost} modules={my_modules} className="flex-grow-1 pb-1 d-flex flex-column"/>
 			</div>
 			</div>
       <Modal isOpen={isOpen} onClose={onClose}>

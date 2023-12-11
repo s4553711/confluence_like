@@ -5,5 +5,6 @@ cd frontend
 npm run build
 rsync -avP dist/* ../backend/public/.
 cd ../backend
+mkdir uploads
 node index.js
 ```

@@ -36,17 +36,33 @@ function Edit() {
 	const [title, setTitle] = useState(old_title)
 	const [post, setPost] = React.useState(old_content)
 	const [touch, setTouch] = React.useState(false)
-	const [editor, setEditor] = React.useState({})
+	let [editor, setEditor] = React.useState(null)
 
-	const my_modules = {
-		toolbar: [
-			[{ 'header': [1, 2, 3, 4, 5, 6]}, {'font':[]}, {'size':[]}],
-			[{ 'color': [] }, { 'background': [] }],
-			['bold', 'italic', 'underline','strike', 'blockquote', 'code-block'],
-			['align', {'list': 'ordered'}, {'list': 'bullet'}, {'indent': '-1'}, {'indent': '+1'}],
-			['link', 'image'],
-			['clean']
-		],
+	async function imageHandler(e,q) {
+		console.log(e);
+		console.log(q);
+		console.log(editor);
+		const editor2 = editor.getEditor();
+		console.log(editor2)
+		const input = document.createElement("input");
+		input.setAttribute("type", "file");
+		input.setAttribute("accept", "image/*");
+		input.click();
+
+		/*input.onchange = async () => {
+			const file = input.files[0];
+			if (/^image\//.test(file.type)) {
+				console.log(file);
+				const formData = new FormData();
+				formData.append("image", file);
+				//const res = await ImageUpload(formData); // upload data into server or aws or cloudinary
+				//const url = res?.data?.url;
+				const url = 'abc123';
+				editor2.editor.insertEmbed(editor2.getSelection(), "image", url);
+			} else {
+				ErrorToast('You could only upload images.');
+			}
+		};*/
 	}
 
 	// for chakra-ui modal
@@ -56,6 +72,8 @@ function Edit() {
 	}, [])
 
 	const sendHandler = () => {
+		const e = editor.getEditor().getContents();
+		console.log(e);
 		if (post != '' && title != '') {
 			setTouch(true)
 		} else {
@@ -73,6 +91,11 @@ function Edit() {
 		});
 	}
 
+	const handleSubmit = React.useCallback((e) => {
+		console.log('21', e);
+		console.log('22', editor);
+	}, []);
+
 	// chakra modal handler
 	const modal_close_handler = () => {
 		navigate("/pages");
@@ -86,8 +109,31 @@ function Edit() {
 	const cancel = () => {console.log("Cancelled")}
 
 	const assign_editor = (e) => {
-		setEditor(e);
+		console.log('1', e);
+		console.log('2', editor);
+		if (e !== null) {
+			console.log('UPDATE');
+			setEditor(e);
+		}
 	}
+
+	//const my_modules = React.useMemo(() => ({
+	const my_modules = {
+		toolbar: {
+			container: [
+				[{ 'header': [1, 2, 3, 4, 5, 6]}, {'font':[]}, {'size':[]}],
+				[{ 'color': [] }, { 'background': [] }],
+				['bold', 'italic', 'underline','strike', 'blockquote', 'code-block'],
+				['align', {'list': 'ordered'}, {'list': 'bullet'}, {'indent': '-1'}, {'indent': '+1'}],
+				['link', 'image'],
+				['clean']
+			],
+			handlers: {
+				//image: handleSubmit
+			}
+		}
+	}
+	//}),[]);
 
 	return (
 		<>

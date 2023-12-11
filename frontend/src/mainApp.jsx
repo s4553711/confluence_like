@@ -53,6 +53,9 @@ const router = createBrowserRouter([
 		//errorElement: <div>resources not found</div>,
 		errorElement: <ErrorBoundary/>,
 		children: [{
+			path: '/',
+			element: "<h3>WOWOWOWO</h3>",
+		},{
 			path: 'archives',
 			element: <Archives/>,
 		},{
