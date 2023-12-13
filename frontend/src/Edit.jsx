@@ -4,8 +4,11 @@ import {Link, useNavigate, useLoaderData} from "react-router-dom";
 import axios from 'axios';
 import EasyEdit, {Types} from 'react-easy-edit';
 
-import ReactQuill from 'react-quill';
+import ReactQuill, {Quill} from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
+
+import ImageResize from 'quill-image-resize-module-react';
+Quill.register('modules/imageResize', ImageResize);
 
 import { useDisclosure } from '@chakra-ui/react'
 import {
@@ -98,7 +101,7 @@ function Edit() {
 
 	// chakra modal handler
 	const modal_close_handler = () => {
-		navigate("/pages");
+		navigate("/page/"+pageId);
 	}
 
 	// inline-editor handler
@@ -131,6 +134,10 @@ function Edit() {
 			handlers: {
 				//image: handleSubmit
 			}
+		},
+		imageResize: {
+			parchment: Quill.import('parchment'),
+			modules: ['Resize', 'DisplaySize']
 		}
 	}
 	//}),[]);
