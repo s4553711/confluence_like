@@ -8,7 +8,7 @@ function Archives() {
 	const [post, setPost] = React.useState([])
 
 	React.useEffect(() => {
-		axios.get('http://127.0.0.1:3344/api/list').then((rep) => {
+		axios.get('/api/list').then((rep) => {
 			console.log(rep);
 			setPost(rep.data.articles);
 		});

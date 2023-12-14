@@ -6,7 +6,7 @@ const AuthContext = React.createContext(0);
 const APIAuth = () =>
 	new Promise((resolve) => {
 		//setTimeout(() => {
-			axios.get('http://127.0.0.1:3344/api/login',{withCredentials: true}).then((rep) => {
+			axios.get('/api/login',{withCredentials: true}).then((rep) => {
 				const data = rep.data;
 				console.log(data); // { status: 200, ret: true, session: 'sessionID123', user: 'doo' }
 				// FIX: no action if login failed
@@ -26,7 +26,7 @@ const fakeAuth = () => {
 const APILogout = () =>
 	new Promise((resolve) => {
 		//setTimeout(() => {
-			axios.get('http://127.0.0.1:3344/api/logout',{withCredentials: true}).then((rep) => {
+			axios.get('/api/logout',{withCredentials: true}).then((rep) => {
 				const data = rep.data;
 				console.log(data); // { status: 200, ret: true }
 				// FIX: no action if login failed
@@ -40,7 +40,7 @@ const APILogout = () =>
 const APICheck = () =>
 	new Promise((resolve) => {
 		//setTimeout(() => {
-			axios.get('http://127.0.0.1:3344/api/auth',{withCredentials: true}).then((rep) => {
+			axios.get('/api/auth',{withCredentials: true}).then((rep) => {
 				const data = rep.data;
 				console.log(data); // { status: 200, ret: true, session: 'sessionID123', user: 'doo' }
 				resolve({ret: data.ret, user: data.user});
@@ -78,7 +78,7 @@ export function AuthProvider2 ({ children }) {
 			const {ret, user} = await APICheck();
 			setToken2(ret);
 			setUser(user);
-			setAvatar('http://127.0.0.1:3344/api/avatar/'+user);
+			setAvatar('/api/avatar/'+user);
 			if (ret) {
 				resolve(ret);
 			} else {
@@ -93,10 +93,10 @@ export function AuthProvider2 ({ children }) {
 			const {ret, user} = await APIAuth();
 			setToken2(ret);
 			setUser(user);
-			setAvatar('http://127.0.0.1:3344/api/avatar/'+user);
+			setAvatar('/api/avatar/'+user);
 			sessionStorage.setItem('token', ret);
 			sessionStorage.setItem('user', user);
-			sessionStorage.setItem('avatar', 'http://127.0.0.1:3344/api/avatar/'+user);
+			sessionStorage.setItem('avatar', '/api/avatar/'+user);
 			if (ret) {
 				resolve(ret);
 			} else {

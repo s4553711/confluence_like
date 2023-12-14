@@ -14,7 +14,7 @@ export function getNotes(id) {
 export async function loader({params}) {
 	//const { name, ret } = await getNotes(params.noteId);
 	//return { name, ret };
-	let rep = await axios.get('http://127.0.0.1:3344/api/note/'+params.pageId);
+	let rep = await axios.get('/api/note/'+params.pageId);
 	console.log(rep);
 	return {...rep.data.data, pageId: params.pageId};
 }
@@ -26,7 +26,7 @@ function Page() {
 	const { avatar } = AuthConsumer();
 
 	React.useEffect(() => {
-		//axios.get('http://127.0.0.1:3344/note/'+noteId).then((rep) => {
+		//axios.get('/note/'+noteId).then((rep) => {
 		//	console.log(rep);
 		//	setPost(rep.data.message);
 		//});

@@ -11,7 +11,7 @@ function AllNote() {
 	const navigate = useNavigate()
 
 	React.useEffect(() => {
-		axios.get('http://127.0.0.1:3344/api/notes/read').then((rep) => {
+		axios.get('/api/notes/read').then((rep) => {
 			console.log(rep);
 			setPost(rep.data.data)
 		}).catch((e) => {

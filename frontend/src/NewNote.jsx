@@ -28,7 +28,7 @@ function NewNote() {
 	const [post, setPost] = React.useState('')
 	const [touch, setTouch] = React.useState(false)
 	const [editor, setEditor] = React.useState({})
-	const { user } = AuthConsumer();
+	const { user, avatar } = AuthConsumer();
 
 	console.log(user);
 
@@ -58,7 +58,7 @@ function NewNote() {
 		}
 		axios({
 			method: 'post',
-			url: 'http://127.0.0.1:3344/api/notes/add',
+			url: '/api/notes/add',
 			headers: {'content-type': 'application/json'},
 			data: {title: title, body: post, user: user}
 		}).then((rep) => {
@@ -104,7 +104,7 @@ function NewNote() {
 						/>
 					</div>
 					<div className="me-4 d-flex flex-row">
-						<img src={userLogo} alt="" width="32" height="32" className="rounded-circle me-2"/>
+						<img src={avatar} alt="" width="32" height="32" className="rounded-circle me-2"/>
 						<div className="align-self-center">{user}</div>
 					</div>
 					<div><button className="btn btn-primary rounded-1" onClick={sendHandler}>Share</button></div>
