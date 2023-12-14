@@ -5,6 +5,7 @@ import ReactMarkdown from 'react-markdown'
 import userLogo from './assets/user.png'
 import remarkGfm from 'remark-gfm'
 import './github-markdown.css'
+import AuthConsumer from './AuthProvider2.jsx';
 
 export function getNotes(id) {
 	return {'name': 'abc'+id, 'ret': [1,2,34]};
@@ -21,7 +22,8 @@ export async function loader({params}) {
 function Page() {
 	const navigate = useNavigate()
 	const {pageId, content, title} = useLoaderData();
-	const [count, setCount] = useState(0)
+	const [count, setCount] = useState(0);
+	const { avatar } = AuthConsumer();
 
 	React.useEffect(() => {
 		//axios.get('http://127.0.0.1:3344/note/'+noteId).then((rep) => {
@@ -50,7 +52,7 @@ function Page() {
 					<div className="d-flex flex-row mt-2">
 						<div className="align-items-center align-self-center me-3">
 						<img height={img_wh} width={img_wh} 
-							src={userLogo} 
+							src={avatar} 
 							className="img-fluid rounded-circle"/>
 						</div>
 						<div className="align-items-stretch d-flex flex-column" style={style.header}>

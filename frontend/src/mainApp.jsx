@@ -32,10 +32,11 @@ const ProtectedRoute = ({ children }) => {
 	const token = useTokenStore((state) => state.token);
 	const token2 = AuthConsumer().token2;
 
-	console.log('ProtectedRouter> 1', token);
-	console.log('ProtectedRouter> 2', token2);
+	console.log('ProtectedRouter> 1', token, typeof(token));
+	console.log('ProtectedRouter> 2', token2, typeof(token2));
+	console.log(token2 == 0);
 	//if (!token) {
-	if (token2 != 1) {
+	if (token2 == 0) {
 		return <Navigate to="/login" replace />;
 	}
 

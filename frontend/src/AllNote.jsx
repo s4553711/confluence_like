@@ -1,16 +1,23 @@
 import { useState } from 'react'
 import React from 'react'
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import axios from 'axios';
 import userLogo from './assets/user.png'
+import AuthConsumer from './AuthProvider2.jsx';
 
 function AllNote() {
 	const [post, setPost] = React.useState([])
+	const { onLogout } = AuthConsumer();
+	const navigate = useNavigate()
 
 	React.useEffect(() => {
 		axios.get('http://127.0.0.1:3344/api/notes/read').then((rep) => {
 			console.log(rep);
 			setPost(rep.data.data)
+		}).catch((e) => {
+			console.log(e);
+			//onLogout();
+			//navigate('/login');
 		});
 	}, [])
 
@@ -24,7 +31,7 @@ function AllNote() {
 				<div className="row g-0 d-flex align-items-center">
 					<div className="col-md-1 pe-1">
 						<img height={img_wh} width={img_wh} 
-							src={userLogo} 
+							src={v.avatar} 
 							className="img-fluid rounded-circle"/>
 					</div>
 					<div className="col-md-11 text-start">

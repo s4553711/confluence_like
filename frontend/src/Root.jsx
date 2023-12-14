@@ -3,6 +3,7 @@ import {NavLink, Outlet, useNavigate} from "react-router-dom";
 import React from 'react'
 import AuthProvider from './AuthProvider.js';
 import userLogo from './assets/user.png'
+import userImage from './hooks/userImage'
 
 const { useTokenStore } = AuthProvider();
 import AuthConsumer from './AuthProvider2.jsx';
@@ -26,6 +27,7 @@ function Root() {
 	const user = AuthConsumer().user;
 	const onLogin = AuthConsumer().onLogin;
 	const onLogout = AuthConsumer().onLogout;
+	const avatar = AuthConsumer().avatar;
 	console.log("3", token2);
 
 	const f1 = () => {
@@ -48,7 +50,7 @@ function Root() {
 </svg>Create</button>
 				<div className="dropdown me-4">
 					<a href="#" className="d-flex align-items-center text-white text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-						<img src={userLogo} alt="" width="32" height="32" className="rounded-circle me-2"/>
+						<img src={avatar} alt="" width="32" height="32" className="rounded-circle me-2"/>
 						<strong>{user}</strong>
 					</a>
 					<ul className="dropdown-menu dropdown-menu-dark text-small shadow">

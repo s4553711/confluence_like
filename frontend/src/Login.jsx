@@ -39,21 +39,17 @@ function Login() {
 	const token2 = AuthConsumer().token2;
 	const onLogin2 = AuthConsumer().onLogin;
 
-	const handler = async () => {
+	const handler = async (e) => {
 		console.log('Login called');
-		onLogin2().then((ret)=>{
-			console.log('Login status>' ,ret);
-			navigate('/');
-		}).catch((err) => {
-			console.log(err);
-		});
-		/*try {
+		try {
 			let ret = await onLogin2();
 			console.log('Login status>' ,ret);
 			navigate('/');
 		} catch(err) {
 			console.log(err);
-		}*/
+		}
+		console.log('Login handler finish');
+		e.preventDefault();
 	}
 
 	React.useEffect(() => {
@@ -90,7 +86,7 @@ function Login() {
 									</InputGroup>
 									<FormHelperText textAlign="right">Use default to login</FormHelperText>
 								</FormControl>
-								<Button borderRadius={0} type="submit" variant="solid" colorScheme="teal" width="full" onClick={handler}>
+								<Button borderRadius={0} variant="solid" colorScheme="teal" width="full" onClick={handler}>
 									Login
 								</Button>
 							</Stack>

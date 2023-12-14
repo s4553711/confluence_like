@@ -40,7 +40,9 @@ const isAuth = (req, res, next) => {
 		console.log('fail')
 		//next('route')
 		//res.redirect('/login')
-		res.json({'status': 200, 'message': 'fail'})
+		//res.json({'status': 200, 'message': 'fail'})
+		//res.status(401).json({'status':401, 'message':'fail'});
+		next()
 	}
 }
 
@@ -48,6 +50,7 @@ app.use(cookieParser());
 app.use(session(sess));
 //app.use(isAuth);
 app.use(cors());
+//app.use(cors({credentials: true, origin: 'http://localhost:5173'}));
 app.use(express.json());
 
 r.get('/', (req, res) => {
@@ -55,7 +58,7 @@ r.get('/', (req, res) => {
 })
 
 r.get('/login', (req, res) => {
-	logger.info('called login', req.sessionID);
+	logger.info(`called login ${req.sessionID}`);
 	console.log('Cookies: ', req.cookies);
 	console.log(req.session);
 	req.session.user = 'ck';
@@ -72,7 +75,7 @@ r.get('/logout', (req, res) => {
 });
 
 r.get('/auth', (req, res) => {
-	logger.info('Auth with session', req.sessionID);
+	logger.info(`Auth with session ${req.sessionID}`);
 	console.log('Cookies: ', req.cookies);
 	console.log(req.sessionID);
 	console.log(req.session);
@@ -112,6 +115,13 @@ r.get('/resources/:f', (req, res) => {
 		logger.info(err.message);
 	}
 })
+
+r.get('/avatar/:user', (req, res) => {
+	let imageF = 'cat.png'
+	let reqF = `${__dirname}/avatar/${imageF}`;
+	
+	res.sendFile(reqF);
+});
 
 r.post('/notes/add', storage.add_note)
 r.post('/notes/edit', storage.edit_note)

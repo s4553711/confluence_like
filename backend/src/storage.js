@@ -79,7 +79,8 @@ const list_note = async (req, res) => {
 	//let all = await promisify(select.all.bind(select));
 	//let ret = await all();
 	let ret = await getNotes(db, 'notes');
-	res.json({'status': 200, data: ret});
+	let ret2 = ret.map((e) => ({avatar: 'http://127.0.0.1:3344/api/avatar/'+e.owner, ...e}))
+	res.json({'status': 200, data: ret2});
 }
 
 const read_note = async (req, res) => {

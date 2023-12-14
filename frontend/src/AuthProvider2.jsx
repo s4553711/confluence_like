@@ -5,7 +5,7 @@ const AuthContext = React.createContext(0);
 
 const APIAuth = () =>
 	new Promise((resolve) => {
-		setTimeout(() => {
+		//setTimeout(() => {
 			axios.get('http://127.0.0.1:3344/api/login',{withCredentials: true}).then((rep) => {
 				const data = rep.data;
 				console.log(data); // { status: 200, ret: true, session: 'sessionID123', user: 'doo' }
@@ -14,7 +14,7 @@ const APIAuth = () =>
 					resolve({ret: data.ret, user: data.user});
 				}
 			});
-		}, 500);
+		//}, 5000);
 });
 
 const fakeAuth = () => {
@@ -23,15 +23,29 @@ const fakeAuth = () => {
 	});
 }
 
+const APILogout = () =>
+	new Promise((resolve) => {
+		//setTimeout(() => {
+			axios.get('http://127.0.0.1:3344/api/logout',{withCredentials: true}).then((rep) => {
+				const data = rep.data;
+				console.log(data); // { status: 200, ret: true }
+				// FIX: no action if login failed
+				if (data.ret) {
+					resolve({ret: data.ret});
+				} 
+			});
+		//}, 5000);
+});
+
 const APICheck = () =>
 	new Promise((resolve) => {
-		setTimeout(() => {
+		//setTimeout(() => {
 			axios.get('http://127.0.0.1:3344/api/auth',{withCredentials: true}).then((rep) => {
 				const data = rep.data;
 				console.log(data); // { status: 200, ret: true, session: 'sessionID123', user: 'doo' }
 				resolve({ret: data.ret, user: data.user});
 			});
-		}, 500);
+		//}, 5000);
 });
 
 
@@ -41,15 +55,30 @@ const fakeCheck = () => {
 	});
 }
 
+const getInitToken = () => {
+	const token = sessionStorage.getItem('token') ? sessionStorage.getItem('token') : 0;
+	return token;
+}
+const getInitUser = () => {
+	const user = sessionStorage.getItem('user') ? sessionStorage.getItem('user') : '';
+	return user;
+}
+const getInitAvatar = () => {
+	const user = sessionStorage.getItem('avatar') ? sessionStorage.getItem('avatar') : '';
+	return user;
+}
+
 export function AuthProvider2 ({ children }) {
-	const [token2, setToken2] = React.useState(0);
-	const [user, setUser] = React.useState('');
+	const [token2, setToken2] = React.useState(getInitToken);
+	const [user, setUser] = React.useState(getInitUser);
+	const [avatar, setAvatar] = React.useState(getInitAvatar);
 
 	const update_auth = async () => {
 		return new Promise(async (resolve, reject) => {
-			const {ret, user} = await fakeCheck();
+			const {ret, user} = await APICheck();
 			setToken2(ret);
 			setUser(user);
+			setAvatar('http://127.0.0.1:3344/api/avatar/'+user);
 			if (ret) {
 				resolve(ret);
 			} else {
@@ -58,11 +87,16 @@ export function AuthProvider2 ({ children }) {
 		});
 	}
 
-	const handleLogin = async () => {
+	const handleLogin = () => {
 		return new Promise(async (resolve, reject) => {
-			const {ret, user} = await fakeAuth();
+			//const {ret, user} = await fakeAuth();
+			const {ret, user} = await APIAuth();
 			setToken2(ret);
 			setUser(user);
+			setAvatar('http://127.0.0.1:3344/api/avatar/'+user);
+			sessionStorage.setItem('token', ret);
+			sessionStorage.setItem('user', user);
+			sessionStorage.setItem('avatar', 'http://127.0.0.1:3344/api/avatar/'+user);
 			if (ret) {
 				resolve(ret);
 			} else {
@@ -71,13 +105,20 @@ export function AuthProvider2 ({ children }) {
 		});
 	};
 
-	const handleLogout = () => {
+	const handleLogout = async () => {
+		let ret = await APILogout();
+		if (!ret.ret) {
+			console.log('server side error with logout')
+		}
+		sessionStorage.clear();
 		setToken2(0);
+		setUser('');
 	};
 
 	const value = {
 		token2,
 		user,
+		avatar,
 		onLogin: handleLogin,
 		onLogout: handleLogout,
 	};
